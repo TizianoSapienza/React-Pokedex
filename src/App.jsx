@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-    <PokemonList></PokemonList>
+      <PokemonList></PokemonList>
     </>
   )
 }
