@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react';
-import PokemonCard from './PokemonCard';
 import SearchBar from './SearchBar';
 import LoadingSpinner from './LoadingSpinner';
+import Pagination from './Pagination'; // New component for pagination
+import PokemonGrid from './PokemonGrid';
 import { useGetPokemonListQuery } from '../slices/apiSlice';
 
 export default function PokemonList() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState('');
   const [currentPageInput, setCurrentPageInput] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const { data: pokemonData, isLoading, isError } = useGetPokemonListQuery(currentPage);
 
   // Calculate total number of Pokémon to display based on search query
   let totalPokemonCount;
-  if (searchQuery) {
+  if (searchResults) {
     if (pokemonData) {
       totalPokemonCount = pokemonData.results.filter(
-        pokemon => pokemon.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+        pokemon => pokemon.name.toLowerCase().startsWith(searchResults.toLowerCase())
       ).length;
     } else {
       totalPokemonCount = 0;
@@ -45,7 +46,7 @@ export default function PokemonList() {
 
   useEffect(() => {
     setCurrentPage(1); // Reset to the first page when search query changes
-  }, [searchQuery]);
+  }, [searchResults]);
 
   // Loading spinner while data is being fetched
   if (isLoading) {
@@ -58,9 +59,9 @@ export default function PokemonList() {
   }
 
   // Filter displayed Pokemon based on search query
-  const filteredPokemon = searchQuery
+  const filteredPokemon = searchResults
     ? pokemonData.results.filter(pokemon =>
-        pokemon.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+        pokemon.name.toLowerCase().startsWith(searchResults.toLowerCase())
       )
     : pokemonData.results;
 
@@ -70,55 +71,16 @@ export default function PokemonList() {
   return (
     <>
       <h1 className="text-center text-4xl font-bold font-mono mb-8">Pokédex</h1>
-      <SearchBar handleSearch={setSearchQuery} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-cols-auto justify-items-center">
-        {filteredPokemon.length === 0 ? (
-          <div>No Pokémon found.</div>
-        ) : (
-          paginatedPokemon.map((pokemon, index) => (
-            <div key={index} className="w-full sm:w-auto md:w-auto lg:w-auto">
-              <PokemonCard pokemon={pokemon} />
-            </div>
-          ))
-        )}
-      </div>
-      <div className="my-auto text-black font-bold font-mono mt-2">
-        Page {currentPage} of {totalPages}
-      </div>
-      <div className="flex justify-center mt-4">
-        <button
-          onClick={() => handlePagination(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold font-mono py-2 px-4 rounded-lg mr-2"
-        >
-          Previous
-        </button>
-        <button
-          onClick={() => handlePagination(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold font-mono py-2 px-4 rounded-lg"
-        >
-          Next
-        </button>
-      </div>
-
-      <div className="flex justify-center mt-3">
-        <button
-          onClick={goToPage}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold font-mono py-2 px-4 rounded-lg"
-        >
-          Go to Page
-        </button>
-        <input
-          type="number"
-          value={currentPageInput}
-          onChange={(e) => setCurrentPageInput(e.target.value)}
-          className="ml-2 px-1 py-1 border-2 border-blue-500 rounded-lg focus:outline-none focus:border-blue-700"
-          min="1"
-          max={totalPages}
-          placeholder={`${currentPage}/${totalPages}`}
-        />
-      </div>
+      <SearchBar handleSearch={setSearchResults} />
+      <PokemonGrid paginatedPokemon={paginatedPokemon} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePagination={handlePagination}
+        goToPage={goToPage}
+        currentPageInput={currentPageInput}
+        setCurrentPageInput={setCurrentPageInput}
+      />
     </>
   );
 }

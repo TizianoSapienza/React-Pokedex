@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useGetPokemonInfoQuery } from '../slices/apiSlice';
+import LoadingSpinner from './LoadingSpinner';
 
 function PokemonCard({ pokemon }) {
   // Pokemon type colors
@@ -25,27 +27,23 @@ function PokemonCard({ pokemon }) {
     fairy: 'bg-[#EE99AC]',
   };
 
-  const [pokemonInfo, setPokemonInfo] = useState(null);
+  const { data: pokemonInfo, isLoading, isError } = useGetPokemonInfoQuery(pokemon.url);
   const [pokemonType, setPokemonType] = useState(null);
+  const [imageLoading, setImageLoading] = useState(true);
 
   // Fetch Pokemon info and set main type color
   useEffect(() => {
-    const fetchPokemonInfo = async () => {
-      try {
-        const response = await fetch(pokemon.url);
-        const data = await response.json();
-        const mainType = data.types[0].type.name;
-        setPokemonInfo(data);
-        setPokemonType(mainType);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchPokemonInfo();
-  }, [pokemon.url]);
+    if (pokemonInfo && pokemonInfo.types && pokemonInfo.types.length > 0) {
+      const mainType = pokemonInfo.types[0].type.name;
+      setPokemonType(mainType);
+    }
+  }, [pokemonInfo]);
 
   const typeColorClass = typeColors[pokemonType];
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
 
   return (
     <Link to={pokemonInfo && `/pokemon/${pokemonInfo.id}`}>
@@ -54,24 +52,31 @@ function PokemonCard({ pokemon }) {
           typeColorClass || 'bg-gray-100'
         }`}
       >
-        {pokemonInfo && (
-          <>
-            <div className="flex flex-row justify-between items-center h-10 w-full mt-1 px-3">
-              <p className="text-gray-800 text-lg font-bold font-mono">
-                #{pokemonInfo.id}
-              </p>
-            </div>
-            <img
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonInfo.id}.png`}
-              alt={pokemonInfo.name}
-              className="mx-auto -mb-8"
-              style={{ width: '120px', height: '120px' }}
-            />
-            <div className=" bg-zinc-800 text-white text-lg text-center font-semibold font-mono py-6 mt-2 rounded-xl w-full">
-              {pokemonInfo.name.charAt(0).toUpperCase() +
-                pokemonInfo.name.slice(1)}
-            </div>
-          </>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : isError ? (
+          <div className="text-red-600 text-center p-4">Error fetching Pokemon data</div>
+        ) : (
+          pokemonInfo && (
+            <>
+              <div className="flex flex-row justify-between items-center h-10 w-full mt-1 px-3">
+                <p className="text-gray-800 text-lg font-bold font-mono">
+                  #{pokemonInfo.id}
+                </p>
+              </div>
+              <img
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonInfo.id}.png`}
+                alt={pokemonInfo.name}
+                className={`mx-auto -mb-8 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+                style={{ width: '120px', height: '120px', transition: 'opacity 0.3s ease' }}
+                onLoad={handleImageLoad}
+              />
+              {imageLoading && <LoadingSpinner className="mx-auto mt-4" />}
+              <div className="bg-zinc-800 text-white text-lg text-center font-semibold font-mono py-6 mt-2 rounded-xl w-full">
+                {pokemonInfo.name.charAt(0).toUpperCase() + pokemonInfo.name.slice(1)}
+              </div>
+            </>
+          )
         )}
       </div>
     </Link>

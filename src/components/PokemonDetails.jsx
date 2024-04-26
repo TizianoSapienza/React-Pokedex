@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import LoadingSpinner from './LoadingSpinner';
 
 function PokemonDetails() {
   const { id } = useParams();
@@ -61,7 +62,7 @@ function PokemonDetails() {
   };
 
   if (!pokemonDetails) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   const { name, types, height, weight, abilities, stats } = pokemonDetails;
@@ -113,7 +114,7 @@ function PokemonDetails() {
             ))}
           </div>
           <p className="text-white mt-2">Height: {height * 10} cm</p>
-          <p className="text-white mt-2">Weight: {weight / 10} kg</p>
+          <p className="text-white mt-2">Weight: {weight / 10} Kg</p>
           <p className="text-white mt-2 max-w-40">
             Abilities:{' '}
             {abilities

@@ -1,5 +1,3 @@
-// In apiSlice.js
-
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const pokemonApi = createApi({
@@ -9,7 +7,10 @@ export const pokemonApi = createApi({
     getPokemonList: builder.query({
       query: () => 'pokemon?limit=1025',
     }),
+    getPokemonInfo: builder.query({
+      query: (url) => url,
+    })
   }),
 });
 
-export const { useGetPokemonListQuery } = pokemonApi;
+export const { useGetPokemonListQuery, useGetPokemonInfoQuery } = pokemonApi;
