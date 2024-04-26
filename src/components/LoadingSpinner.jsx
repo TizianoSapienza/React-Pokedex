@@ -1,7 +1,14 @@
+import PulseLoader from 'react-spinners/ClipLoader';
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+}
 function LoadingSpinner() {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"></div>
+    <div className="flex justify-center items-center h-full">
+      {/* Use the ClipLoader component from react-spinners */}
+      <PulseLoader color="#000" loading={true}  cssOverride={override} size={180} />
     </div>
   );
 }
