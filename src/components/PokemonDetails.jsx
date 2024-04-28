@@ -1,47 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useGetPokemonInfoQuery } from '../slices/apiSlice';
 import LoadingSpinner from './LoadingSpinner';
+import { typeColors } from '../other/typeColors';
 
 function PokemonDetails() {
   const { id } = useParams();
   const navigateTo = useNavigate();
-  const [pokemonDetails, setPokemonDetails] = useState(null);
   const [shinySprite, setShinySprite] = useState(false);
 
-  const typeColors = {
-    normal: 'bg-[#A8A878]',
-    fire: 'bg-[#F08030]',
-    water: 'bg-[#6890F0]',
-    grass: 'bg-[#78C850]',
-    electric: 'bg-[#F8D030]',
-    ice: 'bg-[#98D8D8]',
-    fighting: 'bg-[#C03028]',
-    poison: 'bg-[#A040A0]',
-    ground: 'bg-[#E0C068]',
-    flying: 'bg-[#A890F0]',
-    psychic: 'bg-[#F85888]',
-    bug: 'bg-[#A8B820]',
-    rock: 'bg-[#B8A038]',
-    ghost: 'bg-[#705898]',
-    dark: 'bg-[#705848]',
-    dragon: 'bg-[#7038F8]',
-    steel: 'bg-[#B8B8D0]',
-    fairy: 'bg-[#EE99AC]',
-  };
-
-  useEffect(() => {
-    const fetchPokemonDetails = async () => {
-      try {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-        const data = await response.json();
-        setPokemonDetails(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchPokemonDetails();
-  }, [id]);
+  const { data: pokemonDetails, isLoading, isError } = useGetPokemonInfoQuery(`pokemon/${id}`);
 
   const toggleShinySprite = () => {
     setShinySprite((prev) => !prev);
@@ -61,8 +29,12 @@ function PokemonDetails() {
     navigateTo(`/pokemon/${nextId}`);
   };
 
-  if (!pokemonDetails) {
+  if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (isError) {
+    return <div>Error fetching Pokémon data</div>;
   }
 
   const { name, types, height, weight, abilities, stats } = pokemonDetails;
@@ -80,13 +52,13 @@ function PokemonDetails() {
       >
         Back to Pokemon List
       </button>
-      <div className="flex flex-col md:flex-row justify-center rounded-lg shadow-lg bg-zinc-500 text-white p-6 font-mono md:shrink-0">
+      <div className="flex flex-col md:flex-row justify-center rounded-2xl shadow-lg bg-zinc-700 text-white p-6 font-mono md:shrink-0">
         {/* Left Section */}
-        <div className="flex flex-col items-center rounded-xl md:mr-2 md:mb-0">
+        <div className="flex flex-col items-center rounded-xl md:mr-10 md:mb-0">
           <img
             src={spriteUrl}
             alt={name}
-            className={`border-2 border-zinc-200 rounded-xl ${backgroundColor} bg-opacity-70 mt-2`}
+            className={`border-2 border-zinc-200 rounded-xl ${backgroundColor} bg-opacity-90 mt-2`}
           />
           <button
             onClick={toggleShinySprite}

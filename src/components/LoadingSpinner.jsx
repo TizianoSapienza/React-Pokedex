@@ -8,7 +8,7 @@ function LoadingSpinner() {
   return (
     <div className="flex justify-center items-center h-full">
       {/* Use the ClipLoader component from react-spinners */}
-      <PulseLoader color="#000" loading={true}  cssOverride={override} size={180} />
+      <PulseLoader color="#000" loading={true}  cssOverride={override} size={120} />
     </div>
   );
 }

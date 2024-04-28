@@ -25,7 +25,7 @@ function SearchBar({ handleSearch }) {
         placeholder="Search by name..."
         value={searchInput}
         onChange={handleInputChange}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
         className="px-4 py-2 border-2 border-blue-500 rounded-lg focus:outline-none focus:border-blue-700 mr-2"
       />
       <button

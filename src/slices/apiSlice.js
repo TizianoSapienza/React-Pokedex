@@ -6,9 +6,11 @@ export const pokemonApi = createApi({
   endpoints: (builder) => ({
     getPokemonList: builder.query({
       query: () => 'pokemon?limit=1025',
+      staleTime: 300,
     }),
     getPokemonInfo: builder.query({
       query: (url) => url,
+      staleTime: 300,
     })
   }),
 });
