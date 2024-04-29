@@ -6,8 +6,12 @@ import LoadingSpinner from './LoadingSpinner';
 import { typeColors } from '../other/typeColors';
 
 function PokemonCard({ pokemon }) {
+  const {
+    data: pokemonInfo,
+    isLoading,
+    isError,
+  } = useGetPokemonInfoQuery(pokemon.url);
 
-  const { data: pokemonInfo, isLoading, isError } = useGetPokemonInfoQuery(pokemon.url);
   const [pokemonType, setPokemonType] = useState(null);
   const [imageLoading, setImageLoading] = useState(true);
 
@@ -35,7 +39,9 @@ function PokemonCard({ pokemon }) {
         {isLoading ? (
           <LoadingSpinner />
         ) : isError ? (
-          <div className="text-red-600 text-center p-4">Error fetching Pokemon data</div>
+          <div className="text-red-600 text-center p-4">
+            Error fetching Pokemon data
+          </div>
         ) : (
           pokemonInfo && (
             <>
@@ -47,13 +53,20 @@ function PokemonCard({ pokemon }) {
               <img
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonInfo.id}.png`}
                 alt={pokemonInfo.name}
-                className={`mx-auto -mb-8 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
-                style={{ width: '120px', height: '120px', transition: 'opacity 0.3s ease' }}
+                className={`mx-auto -mb-8 ${
+                  imageLoading ? 'opacity-0' : 'opacity-100'
+                }`}
+                style={{
+                  width: '120px',
+                  height: '120px',
+                  transition: 'opacity 0.5s ease',
+                }}
                 onLoad={handleImageLoad}
               />
               {imageLoading && <LoadingSpinner className="mx-auto mt-4" />}
               <div className="bg-zinc-800 text-white text-lg text-center font-semibold font-mono py-6 mt-2 rounded-xl w-full">
-                {pokemonInfo.name.charAt(0).toUpperCase() + pokemonInfo.name.slice(1)}
+                {pokemonInfo.name.charAt(0).toUpperCase() +
+                  pokemonInfo.name.slice(1)}
               </div>
             </>
           )

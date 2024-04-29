@@ -26,11 +26,11 @@ function SearchBar({ handleSearch }) {
         value={searchInput}
         onChange={handleInputChange}
         onKeyDown={handleKeyPress}
-        className="px-4 py-2 border-2 border-blue-500 rounded-lg focus:outline-none focus:border-blue-700 mr-2"
+        className="px-4 py-2 border-2 border-red-500 rounded-lg focus:outline-none focus:border-red-600 mr-2"
       />
       <button
         onClick={handleSearchClick}
-        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 focus:outline-none"
+        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none"
       >
         Search
       </button>

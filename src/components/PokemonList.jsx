@@ -3,6 +3,7 @@ import SearchBar from './SearchBar';
 import LoadingSpinner from './LoadingSpinner';
 import Pagination from './Pagination'; // New component for pagination
 import PokemonGrid from './PokemonGrid';
+import Navbar from './Navbar';
 import { useGetPokemonListQuery } from '../slices/apiSlice';
 
 export default function PokemonList() {
@@ -70,7 +71,7 @@ export default function PokemonList() {
 
   return (
     <>
-      <h1 className="text-center text-4xl font-bold font-mono mb-8">Pokédex</h1>
+      <Navbar />
       <SearchBar handleSearch={setSearchResults} />
       <PokemonGrid paginatedPokemon={paginatedPokemon} />
       <Pagination

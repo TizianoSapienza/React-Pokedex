@@ -47,12 +47,12 @@ function PokemonDetails() {
   return (
     <>
       <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold font-mono py-2 px-4 rounded-lg mb-4"
+        className="bg-red-500 hover:bg-red-600 text-white font-bold font-mono py-2 px-4 rounded-lg mb-4"
         onClick={goBackToPokemonList}
       >
         Back to Pokemon List
       </button>
-      <div className="flex flex-col md:flex-row justify-center rounded-2xl shadow-lg bg-zinc-700 text-white p-6 font-mono md:shrink-0">
+      <div className="flex flex-col md:flex-row justify-center rounded-2xl shadow-lg bg-zinc-600 text-white p-6 font-mono md:shrink-0">
         {/* Left Section */}
         <div className="flex flex-col items-center rounded-xl md:mr-10 md:mb-0">
           <img
@@ -62,7 +62,7 @@ function PokemonDetails() {
           />
           <button
             onClick={toggleShinySprite}
-            className="mt-4 rounded-xl px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold"
+            className="mt-4 rounded-xl px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold"
           >
             {shinySprite ? 'Show Normal Sprite' : 'Show Shiny Sprite'}
           </button>
@@ -109,7 +109,7 @@ function PokemonDetails() {
             ].map((stat) => (
               <div key={stat.name} className=" items-center mt-1">
                 <span className="text-white">{stat.name}</span>
-                <div className="relative ml-2 flex items-center border-zinc-100 border-2 bg-white bg-opacity-50 rounded-full h-6 w-60">
+                <div className="relative ml-2 flex items-center border-zinc-50 border-2 bg-white bg-opacity-40 rounded-full h-6 w-60">
                   <div
                     className={`absolute left-0 rounded-full h-full ${
                       typeColors[types[0].type.name.toLowerCase()]
@@ -135,13 +135,13 @@ function PokemonDetails() {
       <div className="flex align-center justify-center mt-4 font-mono">
         <button
           onClick={goToPreviousPokemon}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg"
         >
           Previous
         </button>
         <button
           onClick={goToNextPokemon}
-          className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+          className="ml-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg"
         >
           Next
         </button>
